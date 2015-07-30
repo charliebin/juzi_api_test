@@ -5,7 +5,6 @@ import time
 import hashlib
 import pdb
 import random
-import stackless
 
 #md5 encode generatioin, used in uid generation
 def md5_gen(uid):

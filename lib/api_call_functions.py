@@ -32,7 +32,248 @@ class TestResult():
 	self.id = 0
 
 #Article operations
+def get_search_list_col(uid="",keyword="",page=1,size=30):
+	#pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.3"	
+	if uid == "" and keyword == "":
+		request_url = request_url_temp + "search/list/col"
+	elif uid=="" and keyword !="":
+		request_url = request_url_temp + "search/list/col" + \
+		"?accesstoken={0}&ts={1}&keyword={2}". \
+			format(md5_gen(uid), time.time(), keyword) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+	elif uid!="" and keyword =="":
+		request_url = request_url_temp + "search/list/col" + \
+		"?accesstoken={0}&ts={1}&uid={2}". \
+			format(md5_gen(uid), time.time(), uid) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+	elif  uid!="" and keyword!="" :
+		request_url = request_url_temp + "search/list/col" + \
+		"?accesstoken={0}&ts={1}&uid={2}&keyword={3}&page={4}&size={5}". \
+			format(md5_gen(uid),time.time(),uid,keyword,page,size) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+	    resp = requests.get(request_url)
+	except:
+	    pass
+
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return resp
+def get_search_list_article(uid="",keyword="",page=1,size=30):
+	#pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.3"	
+	if uid == "" and keyword == "":
+		request_url = request_url_temp + "search/list/article"
+	elif uid=="" and keyword !="":
+		request_url = request_url_temp + "search/list/article" + \
+		"?accesstoken={0}&ts={1}&keyword={2}&page={3}&size={4}". \
+			format(md5_gen(uid), time.time(), keyword,page,size) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+	elif uid!="" and keyword =="":
+		request_url = request_url_temp + "search/list/col" + \
+                  "?accesstoken={0}&ts={1}&uid={2}". \
+                          format(md5_gen(uid), time.time(), uid) + \
+                 suffix.format(pf=pf, net = net,res=res, ver=ver)
+	elif  uid!="" and keyword!="" :
+		request_url = request_url_temp + "search/list/article" + \
+		"?accesstoken={0}&ts={1}&uid={2}&keyword={3}&page={4}&size={5}". \
+			format(md5_gen(uid),time.time(),uid,keyword,page,size) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+	    resp = requests.get(request_url)
+	except:
+	    pass
+
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return resp
+	
+def get_search_list(uid="",keyword=""):
+	#pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.3"	
+	if uid == "" and keyword == "":
+		request_url = request_url_temp + "search/list"
+	elif uid=="" and keyword !="":
+		request_url = request_url_temp + "search/list" + \
+		"?ts={0}&keyword={1}". \
+			format(time.time(),keyword) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+		print request_url
+		print keyword
+	elif uid!="" and keyword =="":
+		 request_url = request_url_temp + "search/list" + \
+                 "?accesstoken={0}&ts={1}&uid={2}". \
+                         format(md5_gen(uid), time.time(), uid) + \
+                 suffix.format(pf=pf, net = net,res=res, ver=ver)
+	elif uid!="" and keyword!="":
+		request_url = request_url_temp + "search/list" + \
+		"?accesstoken={0}&ts={1}&uid={2}&keyword={3}". \
+			format(md5_gen(uid),time.time(),uid,keyword) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+		print keyword
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		resp = requests.get(request_url)
+	except:
+		pass
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return resp	
+
+def get_search_index(uid=""):
+	#pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.3"	
+	ts=time.time()
+	if uid == "":
+		request_url = request_url_temp + "search/index"
+	else:
+		request_url = request_url_temp + "search/index" + \
+		"?accesstoken={token}&ts={ts}&uid={uid}". \
+			format(token=md5_gen(uid), ts=ts,uid=uid) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		resp = requests.get(request_url)
+	except:
+		pass
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return resp	
+
+ 
+def post_collection_add(uid,aid,accesstoken ):
+	#pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname) 
+	request_url = request_url_temp + "collection/add"
+	time_start = time.time()
+	parameter = {"uid":uid,"aid":aid,"accesstoken":accesstoken}
+	try:
+		 resp = requests.post(request_url, data=parameter)
+        except:
+		pass
+	time_end = time.time()
+	return resp    
+def get_collection_list_video(uid="",ts=time.time(),page=1,size=30):
+	#pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.3"	
+	if uid == "":
+		request_url = request_url_temp + "collection/list/video"
+	else:
+		request_url = request_url_temp + "collection/list/video" + \
+		"?accesstoken={token}&ts={ts}&page={page}&size={size}&uid={uid}". \
+			format(token=md5_gen(uid), ts=ts, page=page, size=size, uid=uid) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		resp = requests.get(request_url)
+	except:
+		pass
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return resp	
+
+def get_common_menu(uid="",ts=time.time()):
+
+	# pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{0}/".format(hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.3"
+	if uid=="":
+		request_url = request_url_temp + "common/menu" + \
+                "?"+suffix.format(pf=pf, net = net,res=res, ver=ver)
+	else:
+		request_url = request_url_temp + "common/menu" + \
+                "?accesstoken={0}&ts={1}&uid={2}". \
+                format(md5_gen(uid), ts,uid) + \
+                suffix.format(pf=pf, net = net,res=res, ver=ver)
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		resp = requests.get(request_url)
+	except:
+		pass
+
+	time_end = time.time()
+
+	t_result.duration = time_end - time_start
+
+	return resp
+	
+def get_article_list_video(uid='',ts=time.time(),page=1,size=30):
+	# pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{0}/".format(hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.3"
+	if uid=="":
+		request_url = request_url_temp + "article/list/video" + \
+		"?accesstoken={0}&ts={1}&page={2}&size={3}". \
+		 format(md5_gen(uid), ts, page,size) + \
+		 suffix.format(pf=pf, net = net,res=res, ver=ver)
+	elif uid!="":
+		request_url = request_url_temp + "article/list/video" + \
+		"?accesstoken={0}&ts={1}&page={2}&size={3}&uid={4}". \
+		format(md5_gen(uid), ts, page,size,uid) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		resp = requests.get(request_url)
+		#t_result.result = "true"
+	except:
+        #t_result.result = "false"
+		pass
+
+	time_end = time.time()
+
+	t_result.duration = time_end - time_start
+
+	return resp	
 def get_article_list_home(uid="", ts=0,page=2,size=30):
+
 	#pdb.set_trace()
 	if ts == 0:
 		ts = time.time()
@@ -60,7 +301,45 @@ def get_article_list_home(uid="", ts=0,page=2,size=30):
 	t_result.duration = time_end - time_start
 	
 	return resp
+
+def get_article_list_newhome(uid='',ts=0,page=1,size=50):
+        #pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.3"	
+
+        if ts == 0:
+                ts = time.time()
+
+        if uid == "":
+                request_url = request_url_temp + "article/list/home?page={0}&size={1}".format(page,size)
+        else:
+                request_url = request_url_temp + "article/list/home" + \
+                "?accesstoken={token}&ts={ts}&page={page}&size={size}&uid={uid}". \
+                format(token=md5_gen(uid), ts=ts, page=page, size=size, uid=uid) + \
+                suffix.format(pf=pf, net = net,res=res, ver=ver)
 	
+        time_start = time.time()
+	
+        t_result = TestResult()
+
+        try:
+                resp = requests.get(request_url)
+                #t_result.result = "true"
+        except:
+                #t_result.result = "false"
+                pass
+
+        time_end = time.time()
+
+        t_result.duration = time_end - time_start
+
+        return resp	
+
+
 def get_article_list_hot(ts=0,page=1,size=30):
 	#pdb.set_trace()
 	if ts == 0:
@@ -112,36 +391,60 @@ def get_article_list_channel(id=26,ts=0,page=1,size=30):
 		return none
 	
 	return resp
+def get_article_list_newchannel(id='',ts=time.time(),page=1,size=30):
+	#pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{0}/".format(hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.3"	
+	if id=='':
+		request_url = request_url_temp + "article/list/channel" + \
+		"?ts={ts}&page={page}&size={size}".format(ts=ts, page=page, size=size)\
+		+ suffix.format(pf=pf, net = net,res=res, ver=ver)
+	else:
+		request_url = request_url_temp + "article/list/channel" + \
+		"?id={id}&ts={ts}&page={page}&size={size}".format(id=id, ts=ts, page=page, size=size)\
+		+ suffix.format(pf=pf, net = net,res=res, ver=ver)
+	
+	time_start = time.time()
+	t_result = TestResult()
+
+	try:
+		resp = requests.get(request_url)
+	except:
+		return none
+	
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return resp
 	
 def get_article_list_category(id=26,ts=0,page=1,size=30):
 	return get_article_list_channel(id=26,ts=0,page=1,size=30)
 	
 	
 def get_article_list_attitude(id=18,ts=0,page=1,size=30):
-    #pdb.set_trace()
-    if ts == 0:
-        ts = time.time()
-
-    request_url = request_url_temp + "article/list/attitude" + \
-	"?id={id}&ts={ts}&page={page}&size={size}".format(id=id, ts=ts, page=page, size=size)\
-    + suffix.format(pf=pf, net = net,res=res, ver=ver)
-	
-    time_start = time.time()
-    try:
-	resp = requests.get(request_url)
-    except:
-	return none	
-	
-    return resp
+	#pdb.set_trace()
+	if ts == 0:
+		ts = time.time()
+	request_url = request_url_temp + "article/list/attitude" + \
+		"?id={id}&ts={ts}&page={page}&size={size}".format(id=id, ts=ts, page=page, size=size)\
+		+ suffix.format(pf=pf, net = net,res=res, ver=ver)
+	time_start = time.time()
+	try:
+		resp = requests.get(request_url)
+	except:
+		return none	
+	return resp
 	
 def get_article_list_author(id=17,ts=0,page=1,size=30):
 	#pdb.set_trace()
-    if ts == 0:
-        ts = time.time()
-
+	if ts == 0:
+		ts = time.time()
 	request_url = request_url_temp + "article/list/author" + \
-	"?id={id}&ts={ts}&page={page}&size={size}".format(id=id, ts=ts, page=page, size=size) + \
-	suffix.format(pf=pf, net = net,res=res, ver=ver)
+		"?id={id}&ts={ts}&page={page}&size={size}".format(id=id, ts=ts, page=page, size=size) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
 
 	try:
 		resp = requests.get(request_url)
@@ -151,14 +454,12 @@ def get_article_list_author(id=17,ts=0,page=1,size=30):
 	return resp
 	
 def get_article_list_tag(ts=0,page=1,size=30):
-    pdb.set_trace()
-	
-    if ts == 0:
-        ts = time.time()
-
+	#pdb.set_trace()
+	if ts == 0:
+		ts = time.time()
 	request_url = request_url_temp + "article/list/tag" + \
-	"?ts={ts}&page={page}&size={size}".format(ts=ts, page=page, size=size) + \
-	suffix.format(pf=pf, net = net,res=res, ver=ver)
+		"?ts={ts}&page={page}&size={size}".format(ts=ts, page=page, size=size) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
 
 	time_start = time.time()
 	t_result = TestResult()
@@ -362,192 +663,156 @@ def check_user(uid="100095", nickname="Testabc"):
 
 #Comment operatoins
 def get_comment_list(ts=0,page=1,size=30):
-    if ts == 0:
-        ts = time.time()
-
-    request_url = request_url_temp + "comment/list" + "?ts={ts}&page={page}".format(ts=ts,page=page)
-    time_start = time.time()
-    t_result = TestResult()
-    
-    try:
-        resp = requests.get(request_url)
-
-        t_result.result = "true"
-    except:
-        t_result.result = "false"
-
-    time_end = time.time()
-
-    t_result.duration = time_end - time_start
-
-    return t_result
+	if ts == 0:
+		ts = time.time()
+	request_url = request_url_temp + "comment/list" + "?ts={ts}&page={page}".format(ts=ts,page=page)
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		resp = requests.get(request_url)
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return t_result
 
 def get_attitude_get(id=20):
-    request_url = request_url_temp + "attitude/get"+"?id={id}".format(id=id)
-    time_start = time.time()
-    t_result = TestResult()
-    try:
-        resp = requests.get(request_url)
-
-        t_result.result = "true"
-    except:
-        t_result.result = "false"
-
-    time_end = time.time()
-
-    t_result.duration = time_end - time_start
-
-    return t_result
+	request_url = request_url_temp + "attitude/get"+"?id={id}".format(id=id)
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		resp = requests.get(request_url)
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return t_result
 
 #Common operations
+'''
 def get_common_menu():
-    request_url = request_url_temp + "comment/menu"
-    time_start = time.time()
-    t_result = TestResult()
-    try:
-        resp = requests.get(request_url)
+	request_url = request_url_temp + "comment/menu"
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		resp = requests.get(request_url)
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
+	time_end = time.time()
+	t_result.duration = time_end - time_start
 
-        t_result.result = "true"
-    except:
-        t_result.result = "false"
-
-    time_end = time.time()
-
-    t_result.duration = time_end - time_start
-
-    return t_result
-
+	return t_result
+'''
 def get_common_setting():
-    request_url = request_url_temp + "comment/setting"
-    #time_start = time.time()
-    #t_result = TestResult()
-    #try:
-    resp = requests.get(request_url)
+	request_url = request_url_temp + "comment/setting"
+	#time_start = time.time()
+	#t_result = TestResult()
+	try:
+		resp = requests.get(request_url)
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
 
-    #    t_result.result = "true"
-    #except:
-    #    t_result.result = "false"
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return t_result
+def post_comment_create(uid=10094,aid=4424):
+	request_url = request_url_temp + "comment/create"
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		commands ={
+		'uid':uid,
+		'aid':aid,
+		'content':"随便传个值",
+		'accesstoken':md5_gen(uid),
+		}
+		resp = requests.post(request_url,data=commands)
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
+	text=resp.text
+	test=json.loads(text)
+	stu1=test["data"]
+	stu2=stu1['id']
+	t_result.id=stu2
+	time_end = time.time()
 
-    #time_end = time.time()
-
-    #t_result.duration = time_end - time_start
-
-    #return t_result
-
-def post_comment_create(uid="10094",aid="4424"):
-    request_url = request_url_temp + "comment/create"
-    time_start = time.time()
-    t_result = TestResult()
-    try:
-        commands ={
-            'uid':uid,
-            'aid':aid,
-            'content':"随便传个值",
-            'accesstoken':md5_gen(uid),
-        }
-        resp = requests.post(request_url,data=commands)
-
-        t_result.result = "true"
-    except:
-        t_result.result = "false"
-
-    text=resp.text
-    test=json.loads(text)
-
-    stu1=test["data"]
-    stu2=stu1['id']
-
-    t_result.id=stu2
-    time_end = time.time()
-
-    t_result.duration = time_end - time_start
-
-    return t_result
+	t_result.duration = time_end - time_start
+	return t_result
 
 def post_comment_complaint(uid,id):
-    request_url = request_url_temp + "comment/complaint"
-    time_start = time.time()
-    t_result = TestResult()
-    try:
-        commands ={
-            'uid':uid,
-            'id':id,
-            'accesstoken':md5_gen(uid),
-        }
-        resp = requests.post(request_url,data=commands)
+	request_url = request_url_temp + "comment/complaint"
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		commands ={
+		'uid':uid,
+		'id':id,
+		'accesstoken':md5_gen(uid),
+		}
+		resp = requests.post(request_url,data=commands)
 
-        t_result.result = "true"
-    except:
-        t_result.result = "false"
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
 
-    print resp.content
+	print resp.content
+	time_end = time.time()
 
-    time_end = time.time()
+	t_result.duration = time_end - time_start
 
-    t_result.duration = time_end - time_start
-
-    return t_result
+	return t_result
 
 def post_comment_destroy(uid,id,aid):
-    request_url = request_url_temp + "comment/destroy"
-    time_start = time.time()
-    t_result = TestResult()
+	request_url = request_url_temp + "comment/destroy"
+	time_start = time.time()
+	t_result = TestResult()
 
-    try:
-        commands ={
-            'uid':uid,
-            'id':id,
-            'aid':aid,
-            'accesstoken':md5_gen(uid),
-        }
-        resp = requests.post(request_url,data=commands)
+	try:
+		commands ={
+		'uid':uid,
+		'id':id,
+		'aid':aid,
+		'accesstoken':md5_gen(uid),
+		}
+		resp = requests.post(request_url,data=commands)
 
-        t_result.result = "true"
-    except:
-        t_result.result = "false"
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
+	#print resp.content
 
-    #print resp.content
+	time_end = time.time()
 
-    time_end = time.time()
+	t_result.duration = time_end - time_start
 
-    t_result.duration = time_end - time_start
-
-    return t_result
+	return t_result
 
 #Attitude operations
 def post_attitude_submit(uid="10094",id="15",aid="4424"):
-    request_url = request_url_temp + "attitude/submit"
-    time_start = time.time()
-    t_result = TestResult()
-    try:
-        commands ={
-            'uid':uid,
-            'id':id,
-            'aid':aid,
-            'accesstoken':md5_gen(uid),
-        }
-        resp = requests.post(request_url,data=commands)
+	request_url = request_url_temp + "attitude/submit"
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+		commands ={
+		'uid':uid,
+		'id':id,
+		'aid':aid,
+		'accesstoken':md5_gen(uid),
+		}
+		resp = requests.post(request_url,data=commands)
 
-        t_result.result = "true"
-    except:
-        t_result.result = "false"
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
+	#print resp.content
+	time_end = time.time()
 
-    #print resp.content
+	t_result.duration = time_end - time_start
+	return t_result
 
-    time_end = time.time()
-
-    t_result.duration = time_end - time_start
-
-    return t_result
-
-if __name__ == "__main__":
-	#print get_article_list_home("17775")
-	print get_article_list_hot()
-	#print get_article_list_recommend()
-	#print get_article_list_channel()
-	#print create_user("21678445", "Teeest")
-	#print update_user("100094", "Testabc")
-	#print update_clientid()
-	#print check_user()
-	
-	
+#if __name__ == "__main__":
