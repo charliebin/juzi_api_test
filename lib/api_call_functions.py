@@ -32,6 +32,99 @@ class TestResult():
 	self.id = 0
 
 #Article operations
+def get_comment_list_user(uid,page,size,sort):
+	#pdb.set_trace()  
+	hostname = "testapi.app.happyjuzi.com/v2.4"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.4"
+	if uid=="" and page =="" and size =="" and sort =="":
+		request_url = request_url_temp + "comment/list/user"
+	elif uid!="" and page =="" and size =="" and sort =="":
+		request_url = request_url_temp + "comment/list/user" + \
+		"?uid={0}&ts={1}".format(uid, time.time()) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+	elif uid!="" and page =="" and size =="" and sort!="":
+		request_url = request_url_temp + "comment/list/user" + \
+		"?uid={0}&ts={1}&sort={2}".format(uid, time.time(),sort) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+	elif  uid!="" and page !="" and size=="" and sort =="":
+		request_url = request_url_temp + "comment/list/user" + \
+		"?uid={0}&ts={1}&page={2}&size={3}". \
+			format(uid,time.time(),page,size) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+	elif uid!="" and page !="" and size!="" and sort=="":
+		request_url = request_url_temp + "comment/list/user" + \
+		"?uid={0}&ts={1}&page={2}&size={3}". \
+			format(uid,time.time(),page,size) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+	elif uid!="" and page !="" and size!="" and sort !="":
+		request_url = request_url_temp + "comment/list/user" + \
+		"?uid={0}&ts={1}&page={2}&size={3}&sort={4}". \
+			format(uid,time.time(),page,size,sort) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+
+	time_start = time.time()
+	t_result = TestResult()
+	try:
+	    resp = requests.get(request_url)
+	except:
+	    pass
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return resp
+def post_subscribe_cancel(type,uid,id,accesstoken):
+	#pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.4"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname) 
+	request_url = request_url_temp + "subscribe/cancel"
+	time_start = time.time()
+	parameter = {"type":type,"uid":uid,"id":id,"accesstoken":accesstoken}
+	t_result = TestResult()
+	try:
+		 resp = requests.post(request_url, data=parameter)
+        except:
+		pass
+	time_end = time.time()
+	return resp    
+def post_subscribe_add(type,uid,id,accesstoken ):
+	#pdb.set_trace()
+	hostname = "devapi.app.happyjuzi.com/v2.4"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname) 
+	request_url = request_url_temp + "subscribe/add"
+	time_start = time.time()
+	parameter = {"type":type,"uid":uid,"id":id,"accesstoken":accesstoken}
+	try:
+		 resp = requests.post(request_url, data=parameter)
+        except:
+		pass
+	time_end = time.time()
+	return resp    
+def get_common_setting(uid=""):
+	#pdb.set_trace()
+	hostname = "testapi.app.happyjuzi.com/v2.4"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.4"	
+	if uid == "":
+		request_url = request_url_temp + "common/setting"
+	else:
+		request_url = request_url_temp + "common/setting" + \
+		"?uid={0}".format(uid) + \
+		suffix.format(pf=pf, net = net,res=res, ver=ver)
+	t_result = TestResult()
+	time_start = time.time()
+	try:
+	    resp = requests.get(request_url)
+	except:
+	    pass
+	time_end = time.time()
+	t_result.duration = time_end - time_start
+	return resp
 def get_search_list_col(uid="",keyword="",page=1,size=30):
 	#pdb.set_trace()
 	hostname = "devapi.app.happyjuzi.com/v2.3"
@@ -302,9 +395,9 @@ def get_article_list_home(uid="", ts=0,page=2,size=30):
 	
 	return resp
 
-def get_article_list_newhome(uid='',ts=0,page=1,size=50):
+def get_article_list_newhome(uid='',ts=0,page=1,size=30):
         #pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.3"
+	hostname = "testapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -691,35 +784,41 @@ def get_attitude_get(id=20):
 	return t_result
 
 #Common operations
-'''
-def get_common_menu():
-	request_url = request_url_temp + "comment/menu"
+
+
+def post_comment_create(uid='',aid=''):
+	#pdb.set_trace()
+	hostname = "testapi.app.happyjuzi.com/v2.4"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.0"
+	request_url = request_url_temp + "comment/create"
 	time_start = time.time()
 	t_result = TestResult()
 	try:
-		resp = requests.get(request_url)
+		commands ={
+		'uid':uid,
+		'aid':aid,           
+		'content':"这篇文章不错啊！",
+		'accesstoken':md5_gen(uid),
+		}
+		resp = requests.post(request_url,data=commands)
 		t_result.result = "true"
 	except:
 		t_result.result = "false"
 	time_end = time.time()
 	t_result.duration = time_end - time_start
+	return resp 
 
-	return t_result
-'''
-def get_common_setting():
-	request_url = request_url_temp + "comment/setting"
-	#time_start = time.time()
-	#t_result = TestResult()
-	try:
-		resp = requests.get(request_url)
-		t_result.result = "true"
-	except:
-		t_result.result = "false"
-
-	time_end = time.time()
-	t_result.duration = time_end - time_start
-	return t_result
-def post_comment_create(uid=10094,aid=4424):
+def post_comment_create_reply(uid='',replyid='',aid=''):
+	hostname = "testapi.app.happyjuzi.com/v2.4"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname)
+	pf = "android"
+	net = "wifi"
+	res = "720x1184"
+	ver = "2.0"
 	request_url = request_url_temp + "comment/create"
 	time_start = time.time()
 	t_result = TestResult()
@@ -727,23 +826,17 @@ def post_comment_create(uid=10094,aid=4424):
 		commands ={
 		'uid':uid,
 		'aid':aid,
-		'content':"随便传个值",
+		'replyid':replyid,                     
+		'content':'reply to mujia!',
 		'accesstoken':md5_gen(uid),
 		}
 		resp = requests.post(request_url,data=commands)
 		t_result.result = "true"
 	except:
 		t_result.result = "false"
-	text=resp.text
-	test=json.loads(text)
-	stu1=test["data"]
-	stu2=stu1['id']
-	t_result.id=stu2
 	time_end = time.time()
-
 	t_result.duration = time_end - time_start
-	return t_result
-
+	return resp   
 def post_comment_complaint(uid,id):
 	request_url = request_url_temp + "comment/complaint"
 	time_start = time.time()

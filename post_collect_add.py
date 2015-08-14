@@ -7,7 +7,7 @@ import pdb
 import random
 from lib.api_call_functions import *
 from lib.util_functions import *
-def collection_add(userid,aid):
+def test_post_collection_add(userid,aid):
 	hostname = "testapi.app.happyjuzi.com/v2.2"
 	request_url_temp = "http://{0}/".format(hostname)
 	uid = userid
