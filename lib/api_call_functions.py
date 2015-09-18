@@ -6,10 +6,17 @@ import hashlib
 import pdb
 import random
 from util_functions import *
+import ConfigParser
 
+#pdb.set_trace()
+cf = ConfigParser.ConfigParser()
+cf.read("/Users/binsheng/py_stat/juzi_api_test/lib/test.config")
+
+current_ver=cf.get("version", "current_ver")
+hostname=cf.get("url", current_ver)
 #hostname = "api.app.happyjuzi.com/v2.0"
 #直接后端访问＋7001端口；访问varnish则不加端口；
-hostname = "testapi.app.happyjuzi.com/v2.2"
+#hostname = "testapi.app.happyjuzi.com/v2.5"
 #hostname = "123.57.10.208:7001/v2.2"
 suffix = "&pf={pf}&net={net}&res={res}&ver={ver}"
 
@@ -34,7 +41,7 @@ class TestResult():
 #Article operations
 def get_comment_list_user(uid,page,size,sort):
 	#pdb.set_trace()  
-	hostname = "testapi.app.happyjuzi.com/v2.4"
+	#hostname = "testapi.app.happyjuzi.com/v2.4"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -77,7 +84,7 @@ def get_comment_list_user(uid,page,size,sort):
 	return resp
 def post_subscribe_cancel(type,uid,id,accesstoken):
 	#pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.4"
+	#hostname = "devapi.app.happyjuzi.com/v2.4"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname) 
 	request_url = request_url_temp + "subscribe/cancel"
 	time_start = time.time()
@@ -91,7 +98,7 @@ def post_subscribe_cancel(type,uid,id,accesstoken):
 	return resp    
 def post_subscribe_add(type,uid,id,accesstoken ):
 	#pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.4"
+	#hostname = "devapi.app.happyjuzi.com/v2.4"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname) 
 	request_url = request_url_temp + "subscribe/add"
 	time_start = time.time()
@@ -104,7 +111,7 @@ def post_subscribe_add(type,uid,id,accesstoken ):
 	return resp    
 def get_common_setting(uid=""):
 	#pdb.set_trace()
-	hostname = "testapi.app.happyjuzi.com/v2.4"
+	#hostname = "testapi.app.happyjuzi.com/v2.4"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -127,7 +134,7 @@ def get_common_setting(uid=""):
 	return resp
 def get_search_list_col(uid="",keyword="",page=1,size=30):
 	#pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.3"
+	#hostname = "devapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -163,7 +170,7 @@ def get_search_list_col(uid="",keyword="",page=1,size=30):
 	return resp
 def get_search_list_article(uid="",keyword="",page=1,size=30):
 	#pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.3"
+	#hostname = "devapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -200,7 +207,7 @@ def get_search_list_article(uid="",keyword="",page=1,size=30):
 	
 def get_search_list(uid="",keyword=""):
 	#pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.3"
+	#hostname = "devapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -238,7 +245,7 @@ def get_search_list(uid="",keyword=""):
 
 def get_search_index(uid=""):
 	#pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.3"
+	#hostname = "devapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -266,7 +273,7 @@ def get_search_index(uid=""):
  
 def post_collection_add(uid,aid,accesstoken ):
 	#pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.3"
+	#hostname = "devapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname) 
 	request_url = request_url_temp + "collection/add"
 	time_start = time.time()
@@ -276,10 +283,23 @@ def post_collection_add(uid,aid,accesstoken ):
         except:
 		pass
 	time_end = time.time()
-	return resp    
+	return resp   
+ 
+def post_collection_cancel(uid,aid,accesstoken ):
+	#pdb.set_trace()
+	#hostname = "devapi.app.happyjuzi.com/v2.3"
+	request_url_temp = "http://{hostname}/".format(hostname=hostname) 
+	request_url = request_url_temp + "collection/cancel"
+	parameter = {"uid":uid,"aid":aid,"accesstoken":accesstoken}
+	try:
+	    resp = requests.post(request_url, data=parameter)
+        except:
+	    pass
+	return resp 
+
 def get_collection_list_video(uid="",ts=time.time(),page=1,size=30):
 	#pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.3"
+	#hostname = "devapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -304,9 +324,8 @@ def get_collection_list_video(uid="",ts=time.time(),page=1,size=30):
 	return resp	
 
 def get_common_menu(uid="",ts=time.time()):
-
 	# pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.3"
+	#hostname = "devapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{0}/".format(hostname)
 	pf = "android"
 	net = "wifi"
@@ -335,7 +354,7 @@ def get_common_menu(uid="",ts=time.time()):
 	
 def get_article_list_video(uid='',ts=time.time(),page=1,size=30):
 	# pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.3"
+	#hostname = "devapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{0}/".format(hostname)
 	pf = "android"
 	net = "wifi"
@@ -365,9 +384,8 @@ def get_article_list_video(uid='',ts=time.time(),page=1,size=30):
 	t_result.duration = time_end - time_start
 
 	return resp	
-def get_article_list_home(uid="", ts=0,page=2,size=30):
 
-	#pdb.set_trace()
+def get_article_list_home(uid="", ts=0,page=2,size=30):
 	if ts == 0:
 		ts = time.time()
 	
@@ -397,7 +415,7 @@ def get_article_list_home(uid="", ts=0,page=2,size=30):
 
 def get_article_list_newhome(uid='',ts=0,page=1,size=30):
         #pdb.set_trace()
-	hostname = "testapi.app.happyjuzi.com/v2.3"
+	#hostname = "testapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -486,7 +504,7 @@ def get_article_list_channel(id=26,ts=0,page=1,size=30):
 	return resp
 def get_article_list_newchannel(id='',ts=time.time(),page=1,size=30):
 	#pdb.set_trace()
-	hostname = "devapi.app.happyjuzi.com/v2.3"
+	#hostname = "devapi.app.happyjuzi.com/v2.3"
 	request_url_temp = "http://{0}/".format(hostname)
 	pf = "android"
 	net = "wifi"
@@ -546,12 +564,12 @@ def get_article_list_author(id=17,ts=0,page=1,size=30):
 
 	return resp
 	
-def get_article_list_tag(ts=0,page=1,size=30):
+def get_article_list_tag(id=2441,ts=0,page=1,size=30):
 	#pdb.set_trace()
 	if ts == 0:
 		ts = time.time()
 	request_url = request_url_temp + "article/list/tag" + \
-		"?ts={ts}&page={page}&size={size}".format(ts=ts, page=page, size=size) + \
+		"?ts={ts}&page={page}&size={size}&id={id}".format(ts=ts, page=page, size=size, id=id) + \
 		suffix.format(pf=pf, net = net,res=res, ver=ver)
 
 	time_start = time.time()
@@ -563,11 +581,7 @@ def get_article_list_tag(ts=0,page=1,size=30):
 	except:
 		t_result.result = "false"
 	
-	time_end = time.time()
-	
-	t_result.duration = time_end - time_start
-	
-	return t_result
+	return resp
 	
 def get_article_get(id=3983):
 	#pdb.set_trace()
@@ -596,7 +610,7 @@ def get_article_content(id=4371):
 	
 	t_result.duration = time_end - time_start
 	
-	return t_result
+	return resp
 	
 def get_article_sharestats(channel="baidu", id=4403, sto="WEIXIN_CIRCLE"):
 	#pdb.set_trace()
@@ -616,7 +630,7 @@ def get_article_sharestats(channel="baidu", id=4403, sto="WEIXIN_CIRCLE"):
 	
 	t_result.duration = time_end - time_start
 	
-	return t_result
+	return resp
 
 #User operations
 def get_user_info(uid="17775"):
@@ -635,7 +649,7 @@ def get_user_info(uid="17775"):
 	
 	t_result.duration = time_end - time_start
 	
-	return t_result
+	return resp
 
 def create_user(openid, username):
 	#pdb.set_trace()
@@ -673,7 +687,7 @@ def create_user(openid, username):
 	
 	t_result.duration = time_end - time_start
 	
-	return t_result
+	return resp
 	
 def potrait_user():
 	pass
@@ -704,7 +718,7 @@ def update_user(userid, username):
 	
 	t_result.duration = time_end - time_start
 	
-	return t_result
+	return resp
 	
 def update_clientid(clientid="462923850fc5bd957dd86b543a9de17f", uid="10115", ver="2.1.0.2", d_os="android"):
 	clientid = clientid
@@ -729,7 +743,7 @@ def update_clientid(clientid="462923850fc5bd957dd86b543a9de17f", uid="10115", ve
 	
 	t_result.duration = time_end - time_start
 	
-	return t_result
+	return resp
 
 def check_user(uid="100095", nickname="Testabc"):
 	uid = uid
@@ -752,7 +766,7 @@ def check_user(uid="100095", nickname="Testabc"):
 	
 	t_result.duration = time_end - time_start
 	
-	return t_result
+	return resp
 
 #Comment operatoins
 def get_comment_list(ts=0,page=1,size=30):
@@ -768,7 +782,7 @@ def get_comment_list(ts=0,page=1,size=30):
 		t_result.result = "false"
 	time_end = time.time()
 	t_result.duration = time_end - time_start
-	return t_result
+	return resp
 
 def get_attitude_get(id=20):
 	request_url = request_url_temp + "attitude/get"+"?id={id}".format(id=id)
@@ -781,14 +795,14 @@ def get_attitude_get(id=20):
 		t_result.result = "false"
 	time_end = time.time()
 	t_result.duration = time_end - time_start
-	return t_result
+	return resp
 
 #Common operations
 
 
 def post_comment_create(uid='',aid=''):
 	#pdb.set_trace()
-	hostname = "testapi.app.happyjuzi.com/v2.4"
+	#hostname = "testapi.app.happyjuzi.com/v2.4"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -813,7 +827,7 @@ def post_comment_create(uid='',aid=''):
 	return resp 
 
 def post_comment_create_reply(uid='',replyid='',aid=''):
-	hostname = "testapi.app.happyjuzi.com/v2.4"
+	#hostname = "testapi.app.happyjuzi.com/v2.4"
 	request_url_temp = "http://{hostname}/".format(hostname=hostname)
 	pf = "android"
 	net = "wifi"
@@ -853,12 +867,7 @@ def post_comment_complaint(uid,id):
 	except:
 		t_result.result = "false"
 
-	print resp.content
-	time_end = time.time()
-
-	t_result.duration = time_end - time_start
-
-	return t_result
+	return resp
 
 def post_comment_destroy(uid,id,aid):
 	request_url = request_url_temp + "comment/destroy"
@@ -883,7 +892,7 @@ def post_comment_destroy(uid,id,aid):
 
 	t_result.duration = time_end - time_start
 
-	return t_result
+	return resp
 
 #Attitude operations
 def post_attitude_submit(uid="10094",id="15",aid="4424"):
@@ -906,6 +915,11 @@ def post_attitude_submit(uid="10094",id="15",aid="4424"):
 	time_end = time.time()
 
 	t_result.duration = time_end - time_start
-	return t_result
+	return resp
 
-#if __name__ == "__main__":
+if __name__ == "__main__":
+    cf = ConfigParser.ConfigParser()
+    cf.read("test.config")
+
+    current_ver=cf.get("version", "current_ver")
+    hostname=cf.get("url", current_ver)
