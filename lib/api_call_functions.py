@@ -9,14 +9,14 @@ from util_functions import *
 import ConfigParser
 
 #pdb.set_trace()
-cf = ConfigParser.ConfigParser()
-cf.read("/Users/binsheng/py_stat/juzi_api_test/lib/test.config")
+#cf = ConfigParser.ConfigParser()
+#cf.read("/d/git/project/juzi_api_test/lib/test.config")
 
-current_ver=cf.get("version", "current_ver")
-hostname=cf.get("url", current_ver)
+#current_ver=cf.get("version", "current_ver")
+#hostname=cf.get("url", current_ver)
 #hostname = "api.app.happyjuzi.com/v2.0"
 #直接后端访问＋7001端口；访问varnish则不加端口；
-#hostname = "testapi.app.happyjuzi.com/v2.5"
+hostname = "testapi.app.happyjuzi.com/v2.6"
 #hostname = "123.57.10.208:7001/v2.2"
 suffix = "&pf={pf}&net={net}&res={res}&ver={ver}"
 
@@ -917,9 +917,83 @@ def post_attitude_submit(uid="10094",id="15",aid="4424"):
 	t_result.duration = time_end - time_start
 	return resp
 
-if __name__ == "__main__":
-    cf = ConfigParser.ConfigParser()
-    cf.read("test.config")
+#明星库相关API
+def get_foundpage_list_starlist(ts="",page=1, size=1):
+	request_url = request_url_temp + "foundpage/list/starlist?tes={ts}&page={page}&size={size}".format(ts=ts,page=page, size=size) 
+	try:
+		resp = requests.get(request_url)
+	except:
+		pass
 
-    current_ver=cf.get("version", "current_ver")
-    hostname=cf.get("url", current_ver)
+	return resp
+def  get_foundpage_list_starinfo(uid="",sid="1",ts="",page="1"):
+	request_url=request_url_temp + "foundpage/list/starinfo?uid={uid}&sid={sid}&ts={ts}&page={page}".format(uid=uid,sid=sid,ts=ts,page=page)
+	try:
+		resp = requests.get(request_url)
+	except:
+		pass
+
+	return resp
+
+
+
+def post_foundpage_list_addwish(sid=1,uid="3754362493354797",accesstoken="9bd3c22b713a986e1b2e4003b613f301",content="test"):
+	request_url = request_url_temp+"foundpage/list/addwish"
+	t_result = TestResult()
+	try:
+		commands = {
+		'sid' : sid,
+		'uid' : uid,
+		'accesstoken' : accesstoken,
+		'content' : content
+		}
+		resp = requests.post(request_url,data=commands)
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
+
+	return  resp
+		
+
+def post_foundpage_list_praisestar(sid="1",uid="3754362493354797",accesstoken="9bd3c22b713a986e1b2e4003b613f301"):
+	request_url = request_url_temp+"foundpage/list/praisestar"
+	t_result = TestResult()
+	try:
+		commands = {
+		'sid':sid,
+		'uid':uid,
+		'accesstoken':accesstoken
+		}
+		resp = requests.post(request_url,data=commands)
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
+	return  resp
+def post_foundpage_list_praisewish(sid="1",uid="3754362493354797",accesstoken="9bd3c22b713a986e1b2e4003b613f301",wid="1"):
+	request_url = request_url_temp+"foundpage/list/praisewish"
+	t_result = TestResult()
+	try:
+		commands = {
+		'sid':sid,
+		'uid':uid,
+		'accesstoken':accesstoken,
+		'wid':1
+		}
+		resp = requests.post(request_url,data=commands)
+		t_result.result = "true"
+	except:
+		t_result.result = "false"
+
+	return resp
+
+
+
+if __name__ == "__main__":
+    #cf = ConfigParser.ConfigParser()
+    #cf.read("/d/git/project/juzi_api_test/lib/test.config")
+
+    #current_ver=cf.get("version", "current_ver")
+    #hostname=cf.get("url", current_ver)
+    hostname="testapi.app.happyjuzi.com/v2.6/"
+
+    print get_foundpage_list_starlist().text
